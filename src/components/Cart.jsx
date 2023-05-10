@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
-import { AiOutlineShoppingCart } from "react-icons/ai"
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import store from '../redux/store'
+import { BsCart3 } from "react-icons/bs"
 
 const style = {
   button: {
@@ -12,17 +13,22 @@ const style = {
 }
 
 const Cart = () => {
-  const [itemCount, setItemCount] = useState(0)
-  const navigate = useNavigate()
+
+  const navigate = useNavigate();
+  // const [itemCount, setItemCount] = useState(0)
+
+  // useEffect(() => {
+  //   setItemCount(Carts.length)
+  // }, [Carts])
 
   return (
     <button style={style.button} onClick={() => navigate('/cart')}>
-        <AiOutlineShoppingCart size={45}/>
-        <span 
-        class="badge badge-pill badge-danger"
-        style={{position: 'relative', top: '-15px', right: '10px' }}>
-          {itemCount}
-          </span>
+      <BsCart3 size={45} />
+      <span
+        className="badge badge-pill badge-danger"
+        style={{ position: 'relative', top: '-15px', right: '10px' }}>
+        {(store.getState().cartReducer.Carts).length}
+      </span>
     </button>
   )
 }

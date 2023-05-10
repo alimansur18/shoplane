@@ -16,6 +16,7 @@ const RegisterPage = () => {
     password: '',
     confirmPassword: ''
   }
+  
   const validationSchema = Yup.object({
     firstName: Yup.string().required('Fisrt Name is Required'),
     lastName: Yup.string().required('Last Name is Required'),

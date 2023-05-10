@@ -8,11 +8,14 @@ import Product from "../components/Product";
 
 const Homepage = () => {
     const [products, setProducts] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
+
 
     const fetchData = async () => {
         try {
             const response = await axios.get(Constants.BASE_URL);
-            setProducts(response.data)
+            setIsLoading(true);
+            setProducts(response.data);
         } catch (error) {
             console.log(error)
         }
@@ -27,7 +30,9 @@ const Homepage = () => {
             <Navbar />
             <div className="row product-list">
                 {
-                    products.map(product => <Product data={product} />)
+                    products.map(product => {
+                        return <Product data={product} isLoading={isLoading} />;
+                    })
                 }
             </div>
         </>

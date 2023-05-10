@@ -34,3 +34,23 @@ export const numberCart = (product) => {
         payload: product
     }
 }
+
+export const emptyCart = () => {
+    return {
+        type: ActionTypes.EMPTY_CART,
+    }
+}
+
+export const addToFavourite = (product) => {
+    return {
+        type: ActionTypes.ADD_TO_FAVOURITE,
+        payload: product
+    }
+}
+
+export const removeFromFavourite = (product) => {
+    return {
+        type: ActionTypes.REMOVE_FROM_FAVOURITE,
+        payload: product
+    }
+}

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai"
+import { addToFavourite } from '../redux/actions/cart-actions';
+import { useDispatch } from 'react-redux';
 
 const buttonstyle = {
   button: {
@@ -16,19 +18,16 @@ const buttonstyle = {
   }
 }
 
-function HeartButton({ id }) {
+function HeartButton(props) {
+
   const [isFavorite, setIsFavorite] = useState(false);
 
-  const handleFavoriteToggle = async () => {
-    setIsFavorite(!isFavorite);
+  const dispatch = useDispatch()
 
-    const response = await fetch('/api/favorites', {
-      method: 'POST',
-      body: JSON.stringify({ id }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })}
+  const handleFavoriteToggle = () => {
+    setIsFavorite(!isFavorite);
+    dispatch(addToFavourite(props))
+  }
 
   return (
     <button onClick={handleFavoriteToggle} style={buttonstyle.button}>

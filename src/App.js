@@ -6,7 +6,8 @@ import RegisterPage from './pages/RegisterPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import Categorypage from './pages/CategoryPage';
 import ErrorPage from './pages/ErrorPage';
-import Cart from './pages/Cartpage';
+import Cartpage from './pages/Cartpage';
+import Favourites from './pages/Favourites';
 
 function App() {
   return (
@@ -17,7 +18,8 @@ function App() {
         <Route path="/LoginPage" element={<LoginPage />} />
         <Route path="/RegisterPage" element={<RegisterPage />} />
         <Route path="/products/detail/:id" element={<ProductDetailPage />} />
-        <Route path="/cart" element={<Cart />} />
+        <Route path="/cart" element={<Cartpage />} />
+        <Route path="/favourites" element={<Favourites />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </Router>

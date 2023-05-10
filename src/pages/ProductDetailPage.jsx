@@ -7,17 +7,20 @@ import Constants from '../api/Constants'
 import { addToCart } from '../redux/actions/cart-actions'
 import StarRating from '../components/StarRating'
 import Header from '../components/Header'
+import { connect } from 'react-redux'
+import { FaShoppingCart } from "react-icons/fa"
 
 const ProductDetailPage = () => {
 
   const {id} = useParams()
 
   const [product, setProduct] = useState({})
-
   const dispatch = useDispatch()
+
   
   const fetchData = async () => {
     const res = await axios.get(Constants.BASE_URL+id);
+    console.log(res);
     setProduct(res.data);
   }
 
@@ -45,10 +48,10 @@ const ProductDetailPage = () => {
             <h4 className='text-secondary'>{product.title}</h4>
             {/* <StarRating data={product.rating} /> */}
 
-            <h3 class="card-title">
+            <h3 className="card-title">
               <span className="text-secondary small">$</span> {product.price}</h3>
               <p className='text-dark'>{product.description}</p>
-            <button onClick={onClickHandler} className='btn btn-primary'>Add to Cart</button>
+            <button onClick={onClickHandler} className='btn btn-primary'><FaShoppingCart /> Add to Cart</button>
           </div>
         </div>
       </div>
@@ -57,4 +60,11 @@ const ProductDetailPage = () => {
   )
 }
 
-export default ProductDetailPage;
+const mapStateToProps = state => {
+  return {
+    Carts: state.cartReducer.Carts
+  };
+};
+
+export default connect(mapStateToProps)(ProductDetailPage);
+

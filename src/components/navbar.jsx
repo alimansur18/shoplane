@@ -21,17 +21,17 @@ const Navbar = () => {
 
     return (
         <div>
-            <nav class="">
+            <nav className="">
                 <hr />
-                <div class="navbar-container">
-                    <ul class="navbar">
-                        <li class="nav-item active">
-                            <Link class="nav-link" to={'/'}>All</Link>
+                <div className="navbar-container">
+                    <ul className="navbar" style={{gap:'8rem'}}>
+                        <li key={'All'} className="nav-item active">
+                            <Link className="nav-link" to={'/'}>All</Link>
                         </li>
                         {categrories.map((category) => (
-                            <li>
-                                <Link class="nav-link" to={'/products/category/' + category}>
-                                    {category}
+                            <li key={category}>
+                                <Link className="nav-link" to={'/products/category/' + category}>
+                                    {category.charAt(0).toUpperCase() + category.slice(1)}
                                 </Link>
                             </li>
                         ))}

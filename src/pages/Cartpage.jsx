@@ -1,17 +1,39 @@
 import Header from '../components/Header'
 import Navbar from '../components/navbar'
-import { removeFromCart, increaseQuantity, decreaseQuantity, numberCart } from '../redux/actions/cart-actions'
-import React, { useState } from 'react';
+import { removeFromCart, increaseQuantity, decreaseQuantity, emptyCart } from '../redux/actions/cart-actions'
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaPlus, FaMinus, FaTrash } from 'react-icons/fa';
+import { connect } from 'react-redux'
 
-const Cart = ({ cartItems, handleUpdateCartQty, handleRemoveFromCart, handleEmptyCart }) => {
-    const [showEmptyCartModal, setShowEmptyCartModal] = useState(false);
 
-    const handleEmptyCartModal = () => {
-        setShowEmptyCartModal(true);
-    };
 
+const Cartpage = (props) => {
+
+    const {cartItems} = props
+
+    const handleRemoveFromCart = (id) => {
+        const {removeFromCart} = props
+        removeFromCart(id)
+    }
+
+    const handleincreaseQuantity = (qty) => {
+        const {increaseQuantity} = props;
+        increaseQuantity(qty)
+    }
+
+    const handledecreaseQuantity = (qty) => {
+        const {decreaseQuantity} = props;
+        decreaseQuantity(qty)
+    }
+
+    const handleEmptyCart = () => {
+        const {emptyCart} = props;
+        emptyCart()
+    }
+
+    let total = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)
+    let taxes = (total * 0.18).toFixed(2)
 
     return (
         <div>
@@ -20,23 +42,21 @@ const Cart = ({ cartItems, handleUpdateCartQty, handleRemoveFromCart, handleEmpt
                 <Navbar />
             </div>
             <div className='row'>
-                <div className="col-md-3">
-                    <div className="card">
-                        <div className="card-body">
 
-                        </div>
-                    </div>
-                </div>
                 <div className="col-md-9">
                     <div className="container my-4">
-                        <h1>Shopping Cart</h1>
+                        <h2>Shopping Cart</h2>
                         {cartItems.length === 0 ? (
-                            <div className="alert alert-warning" role="alert">
-                                Your cart is empty. <Link to="/">Continue Shopping</Link>
-                            </div>
+                            <>
+                                <hr />
+                                <div className="alert alert-warning" role="alert">
+                                    Your cart is empty. <Link to="/">Continue Shopping</Link>
+                                </div>
+                                <hr />
+                            </>
                         ) : (
                             <>
-                                <table className="table table-striped">
+                                <table className="table">
                                     <thead>
                                         <tr>
                                             <th scope="col">Product</th>
@@ -50,26 +70,32 @@ const Cart = ({ cartItems, handleUpdateCartQty, handleRemoveFromCart, handleEmpt
                                         {cartItems.map((item) => (
                                             <tr key={item.id}>
                                                 <td>
-                                                    <Link to={`/products/${item.id}`}>
-                                                        <img src={item.image} alt={item.title} className="me-2" width="50" height="50" />
-                                                        {item.title}
-                                                    </Link>
+                                                    <div style={{ display: 'flex', justifyContent: 'start', gap:'1rem' }}>
+                                                        <Link to={`/products/${item.id}`}>
+                                                            <img src={item.image} alt={item.title} width="100" maxHeight="100" />
+                                                        </Link>
+                                                        <h5>
+                                                            Brand
+                                                            <p className='text-secondary h6'>
+                                                                {item.title.length > 45 ? `${item.title.substring(0, 45)}...` : item.title}
+                                                            </p>
+                                                        </h5>
+                                                    </div>
                                                 </td>
                                                 <td>
-                                                    <div className="input-group">
+                                                    <div className="input-group input-group-sm">
                                                         <button
-                                                            className="btn btn-outline-secondary"
+                                                            className="btn btn-outline-secondary btn-sm"
                                                             type="button"
-                                                            onClick={() => handleUpdateCartQty(item.id, item.quantity - 1)}
-                                                            disabled={item.quantity <= 1}
+                                                            onClick={() => handledecreaseQuantity(item.id)}
                                                         >
                                                             <FaMinus />
                                                         </button>
-                                                        <input type="text" className="form-control text-center" value={item.quantity} readOnly />
+                                                        <h3 style={{ padding: '0.5rem' }}> {item.quantity} </h3>
                                                         <button
-                                                            className="btn btn-outline-secondary"
+                                                            className="btn btn-outline-secondary btn-sm"
                                                             type="button"
-                                                            onClick={() => handleUpdateCartQty(item.id, item.quantity + 1)}
+                                                            onClick={() => handleincreaseQuantity(item.id)}
                                                         >
                                                             <FaPlus />
                                                         </button>
@@ -88,12 +114,11 @@ const Cart = ({ cartItems, handleUpdateCartQty, handleRemoveFromCart, handleEmpt
                                     <tfoot>
                                         <tr>
                                             <td colSpan="3" className="text-end">
-                                                <button className="btn btn-outline-danger" onClick={handleEmptyCartModal}>
+                                                <button className="btn btn-outline-danger" onClick={() => handleEmptyCart()}>
                                                     Empty Cart
                                                 </button>
                                             </td>
-                                            <td colSpan="2" className="text-end">
-                                                <strong>Total: ${cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)}</strong>
+                                            <td colSpan="2">
                                             </td>
                                         </tr>
                                     </tfoot>
@@ -102,10 +127,53 @@ const Cart = ({ cartItems, handleUpdateCartQty, handleRemoveFromCart, handleEmpt
                         )}
                     </div>
                 </div>
+                <div className="col-md-3">
+                    <div className="card" style={{ margin: '3rem 2.5rem 0 0' }}>
+                        <div className="card-body">
+                            <h4>Order Summary</h4>
+                            <table className="table">
+                                <tbody>
+                                    <tr className='text-secondary' >
+                                        <th scope="row">Sub-Total</th>
+                                        <td align='right'>$ {total}</td>
+                                    </tr>
+                                    <tr className='text-secondary'>
+                                        <th scope="row">Shipping</th>
+                                        <td align='right'>$ 5</td>
+                                    </tr>
+                                    <tr className='text-secondary'>
+                                        <th scope="row">Taxes</th>
+                                        <td align='right'>$ {taxes}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" className='bold'>Order total</th>
+                                        <td align='right'>$ {Number.parseFloat(total + taxes).toFixed(2)}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     )
 }
 
-export default Cart;
+const mapStateToProps = (state) => {
+    return {
+        cartItems: state.cartReducer.Carts,
+    }
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        removeFromCart: (item) => dispatch(removeFromCart(item)),
+        increaseQuantity: (item) => dispatch(increaseQuantity(item)),
+        decreaseQuantity: (item) => dispatch(decreaseQuantity(item)),
+        emptyCart: () => dispatch(emptyCart())
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Cartpage);
+
 

@@ -5,12 +5,12 @@ import { Rating } from 'react-simple-star-rating'
 const StarRating = (rating) => {
 
     const {rate, count} = rating.data
-    console.log(rating.data)
 
-    const [star, setStar] = useState(rate)
+    const [star, setStar] = useState(rate);
+
     const handleRating = (newRate) => {
-        rate = rate + newRate
-        setStar(rate)
+        setStar(rate + newRate);
+
     }
 
     return (
