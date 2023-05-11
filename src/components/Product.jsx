@@ -15,7 +15,6 @@ const Product = (props) => {
     const onClickHandler = () => {
         dispatch(addToCart(props.data))
       }
-
     return (
         !isLoading ?
             <div className="col-3" >

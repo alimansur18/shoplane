@@ -4,8 +4,6 @@ import Product from "./Product";
 import { useParams } from "react-router-dom";
 import Endpoints from "../api/Endpoints";
 
-
-
 const Productlist = () => {
     const {category} = useParams()
     const [products, setProducts] = useState([])

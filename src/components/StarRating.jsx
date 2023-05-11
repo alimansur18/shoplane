@@ -4,25 +4,21 @@ import { Rating } from 'react-simple-star-rating'
 
 const StarRating = (rating) => {
 
-    const {rate, count} = rating.data
-
-    const [star, setStar] = useState(rate);
-
-    const handleRating = (newRate) => {
-        setStar(rate + newRate);
-
-    }
+    const ratingData = rating.data
 
     return (
-        <div className="star-rating">
-            <Rating
-                allowFraction
-                size={20}
-                onClick={handleRating}
-                initialValue={star}
-            />
-            <small className='text-secondary'>({count})</small>
-        </div>
+        <>
+            {ratingData && (
+                <div className="star-rating">
+                    <Rating
+                        allowFraction
+                        size={20}
+                        initialValue={ratingData.rate}
+                    />
+                    <small className='text-secondary'>({ratingData.count})</small>
+                </div>
+            )}
+        </>
     )
 }
 
