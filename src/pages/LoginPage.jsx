@@ -41,7 +41,6 @@ const LoginPage = () => {
     axios
       .post(Constants.LoGIN_URL, values)
       .then((response) => {
-        console.log(response.data);
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("user", JSON.stringify(response.data.user));
         setRequestResponse({

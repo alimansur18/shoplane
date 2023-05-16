@@ -2,9 +2,10 @@ import React from 'react'
 import Header from '../components/Header'
 import Navbar from '../components/navbar'
 import { useDispatch, useSelector } from 'react-redux'
-import { removeFromFavourite } from '../redux/actions/cart-actions'
+import { removeFromFavourite, addToCart } from '../redux/actions/cart-actions'
 import { FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { FaShoppingCart } from "react-icons/fa"
 
 const Favourites = () => {
 
@@ -13,6 +14,10 @@ const Favourites = () => {
 
   const handleRemoveFromFavourite = (id) => {
     dispatch(removeFromFavourite(id))
+  }
+
+  const onClickHandler = (id) => {
+    dispatch(addToCart(id))
   }
 
   return (
@@ -53,6 +58,11 @@ const Favourites = () => {
                   <td>
                     <button className="btn btn-outline-danger btn-sm" onClick={() => handleRemoveFromFavourite(item.productId.id)}>
                       <FaTrash />
+                    </button>
+                  </td>
+                  <td>
+                    <button onClick={() => onClickHandler(item.productId)} className="btn btn-outline-primary btn-sm">
+                      <FaShoppingCart />
                     </button>
                   </td>
                 </tr>
